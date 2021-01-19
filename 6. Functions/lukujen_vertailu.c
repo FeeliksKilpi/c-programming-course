@@ -4,7 +4,7 @@ int pienin(int luku1, int luku2, int luku3);
 int suurin(int luku1, int luku2, int luku3);
 
 int main() {
-  int luku1, luku2, luku3, pienin, suurin;
+  int luku1, luku2, luku3;
   printf("Anna 1. luku:");
   scanf("%d", &luku1);
   printf("Anna 2. luku:");
@@ -12,10 +12,10 @@ int main() {
   printf("Anna 3. luku:");
   scanf("%d", &luku3);
 
-  min = pienin(luku1, luku2, luku3);
-  max = suurin(luku1, luku2, luku3);
+  int min = pienin(luku1, luku2, luku3);
+  int max = suurin(luku1, luku2, luku3);
 
-  printf("Syöttämistäsi luvuista suurin oli %d ja pienin %d.", min, max);
+  printf("Syöttämistäsi luvuista suurin oli %d ja pienin %d.", max, min);
 
 
   return 0;

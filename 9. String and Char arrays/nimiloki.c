@@ -18,7 +18,7 @@ int main() {
     printf("Tiedoston avaamisessa virhe");
     return 0;
   } else {
-    fprintf(luonti, "%s %s", etunimijono, sukunimijono);
+    fprintf(luonti, "%s %s\n", etunimijono, sukunimijono);
     fclose(luonti);
     printf("Tallennus onnistui!");
   }
