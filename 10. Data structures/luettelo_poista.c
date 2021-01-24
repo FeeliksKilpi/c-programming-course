@@ -2,90 +2,74 @@
 #include <string.h>
 
 int main() {
-  //int strcmp(const char *str1, const char *str2);
-  int maara, i, vertailu_e, vertailu_s;
-  char str1[15];
-  char str2[20];
-  struct yhteystieto {
-    char etunimi[15];
-    char sukunimi[20];
-    char puhelin[15];
-  }henkilo;
+  int i;
+
+  struct contact {
+    char f_name[21];
+    char l_name[21];
+    char phone[21];
+  };
+
+  char file[] = "luettelo.txt";
+  int c_amount = 0;
+  int c_amount_at_start = 0;
+  char f_name_input[21], l_name_input[21];
 
   printf("Anna etunimi:");
-  scanf("%s", henkilo.etunimi);
+  scanf("%s", f_name_input);
 
   printf("Anna sukunimi:");
-  scanf("%s", henkilo.sukunimi);
+  scanf("%s", l_name_input);
 
-  FILE *lue;
-  if((lue = fopen("luettelo.txt", "r+")) == NULL) {
+  FILE *read;
+  if((read = fopen(file, "r")) == NULL) {
     printf("Tiedostoa ei löydetty");
     return 0;
+
   } else {
-    fscanf(lue, "%d", &maara);
-	  struct yhteystieto yhteystiedot_lista[maara];
+    fscanf(read, "%d", &c_amount);
+    c_amount_at_start = c_amount;
+    fclose(read);
+  }
 
-// Luetaan luettelossa olevien ihmisten määrän verran yhteystietoja
-    for (i=0; i<maara; i++) {
-      fscanf(lue, "%s %s %s ",
-      yhteystiedot_lista[i].etunimi,
-      yhteystiedot_lista[i].sukunimi,
-      yhteystiedot_lista[i].puhelin);
-// Otetaan kopiot etunimesta ja sukunimesta i-kohdassa.
-      strcpy(str1, yhteystiedot_lista[i].etunimi);
-      strcpy(str2, yhteystiedot_lista[i].sukunimi);
-// Vertaillaan syötettyihin etu- ja sukunimeen
-      vertailu_e = strcmp(str1, henkilo.etunimi);
-      vertailu_s = strcmp(str2, henkilo.sukunimi);
+  struct contact contacts_list[c_amount];
 
-      if (vertailu_e == 0 && vertailu_s == 0) {
-          maara--;
-          continue;
+  FILE *read_again = fopen(file, "r");
+
+    for (i=0; i<c_amount; i++) {
+      fscanf(read_again, "%s %s %s ",
+      contacts_list[i].f_name,
+      contacts_list[i].l_name,
+      contacts_list[i].phone);
+    }
+  fclose(read_again);
+
+  FILE *write = fopen(file, "w");
+
+    for (i=0; i < c_amount; i++) {
+      if(strcmp(contacts_list[i].l_name, l_name_input) == 0 && strcmp(contacts_list[i].f_name, f_name_input) == 0)
+      {
+        c_amount_at_start--;
+        continue;
+      }
+      else {
+        if (i == (c_amount -1)) {
+          fprintf(write, "%s %s %s", contacts_list[i].f_name, contacts_list[i].l_name, contacts_list[i].phone);
         } else {
-          printf("Etsimääsi henkilöä ei löytynyt luettelosta.");
+          fprintf(write, "%s %s %s\n", contacts_list[i].f_name, contacts_list[i].l_name, contacts_list[i].phone);
         }
-// Kirjoitetaan tiedostoon uuden määrän perusteella takaisin yhteystiedot
-// Määrä 1. riville, muutoin jokainen henkilo omalle rivilleen.
-      fprintf(lue, "%d\n", maara);
-        for (i=0; i<maara; i++) {
-          fprintf(lue, "%s %s %s\n",
-          yhteystiedot_lista[i].etunimi,
-          yhteystiedot_lista[i].sukunimi,
-          yhteystiedot_lista[i].puhelin);
-        }
-      fclose(lue);
-      printf("Tiedot poistettu luettelosta.");
-
+      }
     }
-  }
+  fclose(write);
 
-/*  FILE *kirjoita;
-  if((kirjoita = fopen("luettelo.txt", "w")) == NULL) {
-    printf("Tiedoston avaamisessa virhe");
-    return 0;
+  FILE *write_again = fopen(file, "r+");
+  fprintf(write_again, "%d/n", c_amount_at_start);
+  fclose(write_again);
+
+  if (c_amount_at_start == c_amount) {
+    printf("Etsimääsi henkilöä ei löytynyt luettelosta.\n");
   } else {
-// Kirjoitetaan tiedostoon uuden määrän perusteella takaisin yhteystiedot
-// Määrä 1. riville, muutoin jokainen henkilo omalle rivilleen.
-    fprintf(kirjoita, "%d\n", maara);
-    for (i=0; i<maara; i++) {
-      fprintf(kirjoita, "%s %s %s\n",
-      yhteystiedot_lista[i].etunimi,
-      yhteystiedot_lista[i].sukunimi,
-      yhteystiedot_lista[i].puhelin);
-    }
-    fclose(kirjoita);
-    printf("Tietojen tallennus onnistui.");
+    printf("Tiedot poistettu luettelosta.\n");
   }
-
-
-    for (i=0; i<maara; i++) {
-      printf("%s %s %s\n",
-      yhteystiedot_lista[i].etunimi,
-      yhteystiedot_lista[i].sukunimi,
-      yhteystiedot_lista[i].puhelin);
-    }
-}
- */
   return 0;
 }
